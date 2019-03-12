@@ -71,9 +71,7 @@ google.maps.event.addListener(that.mapsOp.map, 'projection_changed', function(){
       that.successHandle(data);
       that.mapsOp.updateCurveMarker.call(that.mapsOp);
   });
-
-
-  that.displayLocation("33.6160373", "72.9460249")
+ 
 });
 
  google.maps.event.addListener(that.mapsOp.map, 'zoom_changed',function(){
@@ -123,23 +121,6 @@ google.maps.event.addListener(that.mapsOp.map, 'projection_changed', function(){
         e.preventDefault();
         let index = Math.floor(Math.random() * (9 - 0 + 1)) + 0;
         this.$data.summaryData = summaryItems.summaryData[index];
-    },
-    displayLocation : function (latitude,longitude){
-        var geocoder;
-        geocoder = new google.maps.Geocoder();
-        var latlng = new google.maps.LatLng(latitude, longitude);
-
-        geocoder.geocode(
-            {'latLng': latlng}, 
-            function(results, status) {
-                if (status == google.maps.GeocoderStatus.OK) {
-                    console.log("success : ", results);
-                }
-                else {
-                    console.log("error : ", results);
-                }
-            }
-        );
     },
     startInterval: function () {
                    var self = this;
