@@ -165,7 +165,6 @@ google.maps.event.addListener(that.mapsOp.map, 'projection_changed', function(){
     },
     successHandle(data) {
       setStructMapLocationArrowInfo(data.data);
-
       var _objMapsInfo = getListMarkerInfo().markerInfo;
       this.createMarker(_objMapsInfo);
       return data;

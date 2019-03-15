@@ -63,7 +63,7 @@ export default {
             background-color: #3C61AD !important;
             padding: 0;
             margin: 0;
-            padding: 0;
+            padding-bottom: 4px;
             top: 0;
             color: #fff;
             font-size: 13px;

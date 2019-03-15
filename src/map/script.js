@@ -11,142 +11,18 @@ var curveMarker = [];
 var infoWindow = [];
 var objectMap = {};
 
-var styles = [{
-  "featureType": "administrative",
-  "elementType": "labels.text.fill",
-  "stylers": [{
-    "color": "#444444"
-  }]
-}, {
-  "featureType": "landscape",
-  "elementType": "all",
-  "stylers": [{
-    "color": "#f2f2f2"
-  }]
-}, {
-  "featureType": "poi",
-  "elementType": "all",
-  "stylers": [{
-    "visibility": "on"
-  }]
-}, {
-  "featureType": "poi",
-  "elementType": "geometry.fill",
-  "stylers": [{
-    "saturation": "-100"
-  }, {
-    "lightness": "57"
-  }]
-}, {
-  "featureType": "poi",
-  "elementType": "geometry.stroke",
-  "stylers": [{
-    "lightness": "1"
-  }]
-}, {
-  "featureType": "poi",
-  "elementType": "labels",
-  "stylers": [{
-    "visibility": "off"
-  }]
-}, {
-  "featureType": "road",
-  "elementType": "all",
-  "stylers": [{
-    "saturation": -100
-  }, {
-    "lightness": 45
-  }]
-}, {
-  "featureType": "road.highway",
-  "elementType": "all",
-  "stylers": [{
-    "visibility": "simplified"
-  }]
-}, {
-  "featureType": "road.arterial",
-  "elementType": "labels.icon",
-  "stylers": [{
-    "visibility": "off"
-  }]
-}, {
-  "featureType": "transit",
-  "elementType": "all",
-  "stylers": [{
-    "visibility": "off"
-  }]
-}, {
-  "featureType": "transit.station.bus",
-  "elementType": "all",
-  "stylers": [{
-    "visibility": "on"
-  }]
-}, {
-  "featureType": "transit.station.bus",
-  "elementType": "labels.text.fill",
-  "stylers": [{
-    "saturation": "0"
-  }, {
-    "lightness": "0"
-  }, {
-    "gamma": "1.00"
-  }, {
-    "weight": "1"
-  }]
-}, {
-  "featureType": "transit.station.bus",
-  "elementType": "labels.icon",
-  "stylers": [{
-    "saturation": "-100"
-  }, {
-    "weight": "1"
-  }, {
-    "lightness": "0"
-  }]
-}, {
-  "featureType": "transit.station.rail",
-  "elementType": "all",
-  "stylers": [{
-    "visibility": "on"
-  }]
-}, {
-  "featureType": "transit.station.rail",
-  "elementType": "labels.text.fill",
-  "stylers": [{
-    "gamma": "1"
-  }, {
-    "lightness": "40"
-  }]
-}, {
-  "featureType": "transit.station.rail",
-  "elementType": "labels.icon",
-  "stylers": [{
-    "saturation": "-100"
-  }, {
-    "lightness": "30"
-  }]
-}, {
-  "featureType": "water",
-  "elementType": "all",
-  "stylers": [{
-    "color": "#d2d2d2"
-  }, {
-    "visibility": "on"
-  }]
-}];
-var contentString = '<div id="google-popup">' +
-  '<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry \'s standard dummy text ever since the 1500s, when an unknown printer took a galley </p>' +
-  '</div>';
+
 
 function dashBoardMap(id, objectLongLititue) {
   this.id = id;
   this.objectLongLititue = objectLongLititue;
   var Map = google.maps.Map;
   this.LatLngBounds = google.maps.LatLngBounds;
-
+  const zoom = Math.ceil(Math.log2(window.innerWidth)) - 8
   var mapOptions = {
     center: new google.maps.LatLng(0, 0),
-    zoom: Math.ceil(Math.log2(window.innerWidth)) - 8,
+    zoom: zoom,
+    maxZoom: zoom + 4
   };
   this.map = new Map(document.getElementById(id), mapOptions);
   this.markers = [];
@@ -249,11 +125,19 @@ dashBoardMap.prototype.createMarker = function (objectLongLititue, isArrow, arro
   });
 
   let stationId;
+  let inComing=0; 
+	let outComing=0;
+  let totalLiveLink=0;
+  let totalLiveTime=0;
   var info = []
   var buildMarker = this.pos.map((item, i) => {
     stationId = objectLongLititue[i].stationID;
-     info[i] = new google.maps.InfoWindow({
-      content: "<b>Station Caller Id: </b>"+stationId,
+    inComing = objectLongLititue[i].inComing;
+    outComing = objectLongLititue[i].outComing;
+    totalLiveLink = objectLongLititue[i].totalLiveLink;
+    totalLiveTime = objectLongLititue[i].totalLiveTime;
+    info[i] = new google.maps.InfoWindow({
+      content: "<b>Total Live Link Id : </b>" + totalLiveLink + "<br><b>Incoming : </b>" + inComing + "<br><b>Outgoing : </b>" + outComing + "<br><b>Total Live Time : </b>" + totalLiveTime ,
       maxWidth: 250
     });
 

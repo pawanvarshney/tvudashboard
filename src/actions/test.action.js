@@ -24,7 +24,6 @@ const getData = (dataToPost) => {
     data => {
         let getResponse = data;
         if (getResponse) {
-          console.log("return getResponse");
           return getResponse;
         } else {
           return null;
