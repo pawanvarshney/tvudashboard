@@ -75,7 +75,6 @@ google.maps.event.addListener(that.mapsOp.map, 'projection_changed', function(){
 });
 
  google.maps.event.addListener(that.mapsOp.map, 'zoom_changed',function(){
-       console.log("ddd")
       that.mapsOp.removeAllMarker();
       const toSendData = that.getCornerData(that.mapsOp.map);
       that.getData(toSendData).then(function(data){
@@ -88,10 +87,10 @@ google.maps.event.addListener(that.mapsOp.map, 'projection_changed', function(){
     //this.createMarker(_objMapsInfo);
     // google.maps.event.addListener(that.mapsOp.map, 'projection_changed', that.mapsOp.updateCurveMarker.bind(that.mapsOp,function(data){
     //       that.getData();
-    //       console.log("Projection");
+    //       //console.log("Projection");
     // }));
     // google.maps.event.addListener(that.mapsOp.map, 'zoom_changed', that.mapsOp.updateCurveMarker.bind(that.mapsOp,function(data){
-    //     console.log(data);
+    //     //console.log(data);
     // }));
 
   },
@@ -170,7 +169,7 @@ google.maps.event.addListener(that.mapsOp.map, 'projection_changed', function(){
       return data;
     },
     errorHandle(error) {
-      console.log(error);
+      //console.log(error);
     }
   },data() {
     return {

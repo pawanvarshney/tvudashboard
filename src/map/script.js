@@ -10,8 +10,11 @@ var image = markerImage;
 var curveMarker = [];
 var infoWindow = [];
 var objectMap = {};
+let defaultColor = 'green';
+let modifyColor = 'yellow';
 
-
+let defaultzIndex = 0;
+let modifyzindex = 99;
 
 function dashBoardMap(id, objectLongLititue) {
   this.id = id;
@@ -118,6 +121,7 @@ dashBoardMap.prototype.hideMarker = function(id){
 }
 
 dashBoardMap.prototype.createMarker = function (objectLongLititue, isArrow, arrowInfo,id) {
+
   var LatLng = google.maps.LatLng;
   var Marker = google.maps.Marker;
   this.pos = objectLongLititue.map((item) => {
@@ -129,7 +133,8 @@ dashBoardMap.prototype.createMarker = function (objectLongLititue, isArrow, arro
 	let outComing=0;
   let totalLiveLink=0;
   let totalLiveTime=0;
-  var info = []
+  var info = [];
+  var self=this;
   var buildMarker = this.pos.map((item, i) => {
     stationId = objectLongLititue[i].stationID;
     inComing = objectLongLititue[i].inComing;
@@ -146,7 +151,8 @@ dashBoardMap.prototype.createMarker = function (objectLongLititue, isArrow, arro
       draggable: false,
       clickable: true,
       map: this.map,
-      icon: image,
+      //icon: image,
+      icon: this.pinSymbol(defaultColor),
       label: ""
     });
   });
@@ -159,13 +165,15 @@ dashBoardMap.prototype.createMarker = function (objectLongLititue, isArrow, arro
   };
   buildMarker.id = id;
   this.markers.push(buildMarker);
-
+  
   buildMarker[0].addListener('click', function () {
+    self.changeColor(buildMarker, id);
     info[0].open(this.map, buildMarker[0]);
   });
 
   if(buildMarker.length > 1 ){
     buildMarker[1].addListener('click', function () {
+      self.changeColor(buildMarker, id);
       info[1].open(this.map, buildMarker[1]);
     });
   };
@@ -197,9 +205,11 @@ dashBoardMap.prototype.updateCurveMarker = function () {
   //callBack(dataToSend);
 
   var markers = this.markers;
+  //console.log("markers-->", markers);
   var map = this.map;
   var Point = google.maps.Point;
   var Marker = google.maps.Marker;
+  //console.log("Marker-->", Marker);
   markers.forEach((item, i) => {
     if (item.length > 1) {
       var pos1 = item[0].getPosition(), // latlng
@@ -232,7 +242,8 @@ dashBoardMap.prototype.updateCurveMarker = function () {
           var arrowBuilder = [this.createArrow(Marker, posArrow, angle, direction)];
         }
         arrowBuilder.id = item.id;
-        this.arrowMarker.push(arrowBuilder);
+        //this.arrowMarker.push(arrowBuilder);
+        this.arrowMarker[i] = arrowBuilder;
       }
       var zoom = map.getZoom(),
         scale = 1 / (Math.pow(2, -zoom));
@@ -261,12 +272,81 @@ dashBoardMap.prototype.updateCurveMarker = function () {
           icon: symbol,
         });
       }
+
+
     } //condition ends here
   })
 
 
   return true;
 };
+
+/*
+//dynamic pinSymbol based on color
+*/
+dashBoardMap.prototype.pinSymbol = function(color) {
+  return {
+    path: 'M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z M -2,-30 a 2,2 0 1,1 4,0 2,2 0 1,1 -4,0',
+    fillColor: color,
+    fillOpacity: 1,
+    strokeColor: '#154000',
+    strokeWeight: 1,
+    scale: 1,
+   };
+}
+
+dashBoardMap.prototype.changeColor = function(buildMarker, id ) {
+
+  //console.log("buildMarker.length-->", buildMarker.length)
+  //console.log("buildMarker-->", buildMarker)
+  let changeColor = this.pinSymbol(modifyColor);
+  
+  //Modify the color for marker
+  for(let index=0; index<buildMarker.length; index++){
+    buildMarker[index].setOptions({icon: changeColor, zIndex: modifyzindex});
+  }
+  // buildMarker[0].setOptions({icon: changeColor});
+  // if(buildMarker.length > 1 ){
+  //   buildMarker[1].setOptions({icon: changeColor});
+  // }
+
+  //console.log(id)
+  //console.log(curveMarker)
+  //console.log(curveMarker[id])
+  let updateId = id-1;
+
+  //Modify the color for curve 
+  if(curveMarker[updateId]){
+    var symbol = {...curveMarker[updateId].icon, strokeColor: modifyColor};
+    curveMarker[updateId].setOptions({icon: symbol});
+  }
+
+  //console.log("this.arrowMarker[updateId]---->", this.arrowMarker[updateId]);
+
+  //Modify the color for arrrow
+  if(this.arrowMarker[updateId].length){
+
+    for(let index=0; index<this.arrowMarker[updateId].length; index++ ){
+      if(this.arrowMarker[updateId][index])
+      {
+        var symbol = {...this.arrowMarker[updateId][index].icon, strokeColor: modifyColor, fillColor: modifyColor};
+        this.arrowMarker[updateId][index].setOptions({icon: symbol});
+      }
+    }
+    
+    // if(this.arrowMarker[updateId][0])
+    // {
+    //   var symbol0 = {...this.arrowMarker[updateId][0].icon, strokeColor: modifyColor, fillColor: modifyColor};
+    //   this.arrowMarker[updateId][0].setOptions({icon: symbol0});   
+    // } 
+    // if(this.arrowMarker[updateId][1]){
+    //   var symbol1 = {...this.arrowMarker[updateId][1].icon, strokeColor: modifyColor, fillColor: modifyColor};
+    //   this.arrowMarker[updateId][1].setOptions({icon: symbol1});
+    // }
+  }
+
+}
+
 function init() {
   // var styledMap = new google.maps.StyledMapType(styles, {
   //   name: "Styled Map"

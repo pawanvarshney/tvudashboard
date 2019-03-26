@@ -12,6 +12,12 @@ function init(){
 	reset();
 }
 
+function resetIncomingOutgoing(){
+	//
+	objIncoming = {};
+	objOutgoing = {};
+}
+
 function reset(){
 	listMapLocation = [];
 	arrowInfo = {"doubleArrow": ""};
@@ -107,7 +113,11 @@ export function setStructMapLocationArrowInfo(listData){
 	let totalLiveLink = 0;
 	let totalLiveTime = 0;
 
+	resetIncomingOutgoing();
 	makeIdCollection(listData);
+
+	////console.log("objIncoming-->", objIncoming);
+	////console.log("objOutgoing-->", objOutgoing);
 
 	for(var index=0; index<listData.length; index++){
 		data = listData[index];
@@ -145,4 +155,4 @@ export function getListMarkerInfo(){
 
 init();
 //setStructMapLocationArrowInfo(arrData);
-//console.log(getListMarkerInfo());
+////console.log(getListMarkerInfo());
