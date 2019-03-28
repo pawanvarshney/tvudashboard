@@ -166,10 +166,12 @@ dashBoardMap.prototype.createMarker = function (objectLongLititue, isArrow, arro
   buildMarker.id = id;
   this.markers.push(buildMarker);
   
-  buildMarker[0].addListener('click', function () {
-    self.changeColor(buildMarker, id);
-    info[0].open(this.map, buildMarker[0]);
-  });
+  if(buildMarker[0]){
+    buildMarker[0].addListener('click', function () {
+      self.changeColor(buildMarker, id);
+      info[0].open(this.map, buildMarker[0]);
+    });
+  }
 
   if(buildMarker.length > 1 ){
     buildMarker[1].addListener('click', function () {
