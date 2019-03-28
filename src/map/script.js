@@ -83,7 +83,9 @@ dashBoardMap.prototype.removeAllMarker =  function(){
         markerToRemove[0].setMap(null);
         markerToRemove[1].setMap(null);
       }else{
-        markerToRemove[0].setMap(null);
+        if(markerToRemove[0]){
+          markerToRemove[0].setMap(null);
+        }
       }
     }
   })
@@ -326,7 +328,7 @@ dashBoardMap.prototype.changeColor = function(buildMarker, id ) {
   //console.log("this.arrowMarker[updateId]---->", this.arrowMarker[updateId]);
 
   //Modify the color for arrrow
-  if(this.arrowMarker[updateId].length){
+  if(this.arrowMarker[updateId] && this.arrowMarker[updateId].length){
 
     for(let index=0; index<this.arrowMarker[updateId].length; index++ ){
       if(this.arrowMarker[updateId][index])
